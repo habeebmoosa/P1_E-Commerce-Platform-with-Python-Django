@@ -1,0 +1,110 @@
+{% extends 'ecom/homebase.html' %}
+{% load static %}
+{% block content %}
+  <div class="container">
+    <!-- Cart Section -->
+    <div class="panel panel-success">
+      <div class="panel-heading">
+        <h6 style="text-align:center;" class="panel-title">My Cart</h6>
+      </div>
+      <table class="table table-hover table-bordered" id="dev-table">
+        <!-- Table Header -->
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Image</th>
+            <th>Price</th>
+            <th>Description</th>
+            <th>Quantity</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <!-- Table Body -->
+        {% for p in products %}
+          {% if p %}
+            <tr>
+              <td>{{ p.name }}</td>
+              <td>
+                <img src="{% static p.product_image.url %}" alt="Product Image" height="50px" width="50px" />
+              </td>
+              <td>Rs. {{ p.price }}</td>
+              <td>{{ p.description }}</td>
+              <td>
+                <select class="form-select" aria-label="Default select example">
+                  <option value="1">1</option>
+                  <option value="2">2</option>
+                  <option value="3">3</option>
+                </select>
+              </td>
+              <td>
+                <a href="{% url 'save-for-later' p.id %}" class="btn btn-warning btn-xs">
+                  <span class="glyphicon glyphicon-heart"></span> Save for Later
+                </a>
+                <a class="btn btn-danger btn-xs" href="{% url 'remove-from-cart' p.id %}">
+                  <span class="glyphicon glyphicon-trash"></span>
+                </a>
+              </td>
+            </tr>
+          {% else %}
+            <!-- Handle case where no products are available -->
+            <tr>
+              <td colspan="6">
+                <br><br><br>
+                <h1>No products available.</h1>
+              </td>
+            </tr>
+          {% endif %}
+        {% endfor %}
+      </table>
+    </div>
+  </div>
+
+  <div class="container">
+    <!-- Save for Later Section -->
+    <div class="panel panel-info">
+      <div class="panel-heading">
+        <h6 style="text-align:center;" class="panel-title">Save for Later</h6>
+      </div>
+      <table class="table table-hover table-bordered" id="save-for-later-table">
+        <!-- Table Header -->
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Image</th>
+            <th>Price</th>
+            <th>Description</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <!-- Table Body -->
+        {% for saved_item in saved_items %}
+          <tr>
+            <td>{{ saved_item.name }}</td>
+            <td>
+              <img src="{% static saved_item.product_image.url %}" alt="Product Image" height="50px" width="50px" />
+            </td>
+            <td>Rs. {{ saved_item.price }}</td>
+            <td>{{ saved_item.description }}</td>
+            <td>
+              <a href="{% url 'move-to-cart' saved_item.id %}" class="btn btn-success btn-xs">
+                <span>Move Item to Cart</span>
+              </a>
+            </td>
+          </tr>
+        {% endfor %}
+      </table>
+    </div>
+  </div>
+
+  <br><br><br>
+  <div style="text-align: center;">
+    <button class="btn btn-danger btn-lg">Total Rs.{{ total }}</button>
+    <a href="/customer-address">
+      <button class="btn btn-success btn-lg">
+        <span>Purchase</span>
+      </button>
+    </a>
+  </div>
+
+  <br><br><br><br><br>
+{% endblock content %}
